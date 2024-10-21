@@ -1,6 +1,8 @@
 from yaml import load, SafeLoader
 from sys import stdin, exit
 
+s = ''
+
 
 def rec_parse(element, indent, key=''):
     global s
@@ -52,11 +54,11 @@ def load_yaml(text):
 
 
 def main(data):
-    s = ''
     try:
         rec_parse(data, 0)
     except:
         print('Что-то пошло не так')
+        return
     print(s)
 
 
