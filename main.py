@@ -43,18 +43,24 @@ def load_yaml(text):
     try:
         data = load(text, Loader=SafeLoader)
     except:
-        print('Некорректный .yaml файл')
-        exit()
+        print('Некорректный ввод, присутствуют запрещенные символы')
+        return
+    if data == text:
+        print('Некорректный ввод, отсутствуют структурированные данные')
+        return
     return data
+
+
+def main(data):
+    s = ''
+    try:
+        rec_parse(data, 0)
+    except:
+        print('Что-то пошло не так')
+    print(s)
 
 
 if __name__ == '__main__':
     std_input = stdin.read()
     yaml_data = load_yaml(std_input)
-    s = ''
-    try:
-        rec_parse(yaml_data, 0)
-    except:
-        print('Что-то пошло не так')
-        exit()
-    print(s)
+    main(yaml_data)
