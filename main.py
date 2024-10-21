@@ -1,12 +1,9 @@
-import yaml
-from pprint import pprint
-
-s = ''
+from yaml import load, SafeLoader
+from sys import stdin, exit
 
 
 def rec_parse(element, indent, key=''):
     global s
-    key_used = False
 
     def add_string(string):
         global s
@@ -42,9 +39,22 @@ def rec_parse(element, indent, key=''):
         s += '}\n'
 
 
-with open('test.yaml', 'r') as f:
-    data = yaml.load(f, Loader=yaml.SafeLoader)
+def load_yaml(text):
+    try:
+        data = load(text, Loader=SafeLoader)
+    except:
+        print('Некорректный .yaml файл')
+        exit()
+    return data
 
-rec_parse(data, 0)
 
-print(s)
+if __name__ == '__main__':
+    std_input = stdin.read()
+    yaml_data = load_yaml(std_input)
+    s = ''
+    try:
+        rec_parse(yaml_data, 0)
+    except:
+        print('Что-то пошло не так')
+        exit()
+    print(s)
