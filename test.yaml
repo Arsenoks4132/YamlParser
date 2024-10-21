@@ -1,0 +1,27 @@
+volumes:
+  pgdata:
+    driver: local
+
+services:
+  nginx:
+    restart: always
+    image: nginx:latest
+    ports:
+      - 80:8080
+    volumes:
+      - ./siteman/static:/srv/www/siteman/static
+      - ./docker/nginx:/etc/nginx/conf.d
+    depends_on:
+      - python
+
+  python:
+    restart: always
+    image: arseniy/python_django_test:1
+    build:
+      context: .
+      dockerfile: docker/python/Dockerfile
+    volumes:
+      - ./siteman:/srv/www/siteman
+    ports:
+      - 8000:8000
+    command: "gunicorn -c gunicorn.py siteman.wsgi"
