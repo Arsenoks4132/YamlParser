@@ -1,6 +1,6 @@
 import pytest
 
-from main import rec_parse, load_yaml, main
+from main import Parser
 
 
 @pytest.mark.parametrize(
@@ -10,22 +10,25 @@ from main import rec_parse, load_yaml, main
     ]
 )
 def test_wrong_input(capfd, arg, expected):
-    load_yaml(arg)
+    Parser().load_yaml(arg)
     out, err = capfd.readouterr()
     assert out == expected
 
 
 @pytest.mark.parametrize(
     'arg, expected', [
+        ('abc: 1', '''{
+    abc => 1
+}
+'''),
         ('''name: "Lark Parser"
 version: 1.0
 dependencies:
   - "lark"
   - "pyyaml"
 nested:
-  level1: 
-    level2: "deep"
-''',
+  level1:
+    level2: "deep"''',
          '''{
     name => "Lark Parser",
     version => 1.0,
@@ -67,8 +70,7 @@ external_services:
     api_key: "your-email-api-key"
   - name: "Payment Gateway"
     url: "https://payments.example.com"
-    api_key: "your-payment-api-key"
-''',
+    api_key: "your-payment-api-key"''',
          '''{
     app => {
         name => "Simple Web App",
@@ -102,7 +104,7 @@ external_services:
 '''),
     ]
 )
-def test_correct_input(capfd, arg, expected):
-    main(arg)
-    out, err = capfd.readouterr()
-    assert out == expected
+def test_correct_input(arg, expected):
+    p = Parser()
+    p.rec_parse(p.load_yaml(arg), 0)
+    assert p.s == expected

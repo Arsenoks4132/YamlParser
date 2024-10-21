@@ -1,0 +1,27 @@
+# Конфигурация веб-приложения
+app:
+  name: "Simple Web App"
+  version: "1.0.0"
+  port: 8080
+
+# Настройки базы данных
+database:
+  host: "localhost"
+  port: 5432
+  name: "app_db"
+  user: "db_user"
+  password: "securepassword"
+
+# Логирование
+logging:
+  level: "info"
+  file: "/var/log/app.log"
+
+# Внешние сервисы
+external_services:
+  - name: "Email Service"
+    url: "https://email.example.com"
+    api_key: "your-email-api-key"
+  - name: "Payment Gateway"
+    url: "https://payments.example.com"
+    api_key: "your-payment-api-key"
